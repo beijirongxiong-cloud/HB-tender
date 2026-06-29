@@ -1,0 +1,9 @@
+.env
+data/
+conversations/
+.git/
+__pycache__/
+*.pyc
+*.log
+.pytest_cache/
+docs/

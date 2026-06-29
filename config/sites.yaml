@@ -1,0 +1,73 @@
+sites:
+  - id: chinabidding
+    name: 中国采购与招标网
+    url: https://www.chinabidding.cn/
+    env_username: CHINABIDDING_USERNAME
+    env_password: CHINABIDDING_PASSWORD
+    has_captcha: true
+    captcha_type: image
+    search_url: https://www.chinabidding.cn/search/searchzbgg
+    login_required: true
+
+  - id: mobile
+    name: 中国移动采购与招标网
+    url: https://b2b.10086.cn/b2b/main/preIndex.html
+    env_username: MOBILE_USERNAME
+    env_password: MOBILE_PASSWORD
+    has_captcha: true
+    captcha_type: image
+    login_required: true
+
+  - id: tower
+    name: 中国铁塔电子采购平台
+    url: https://ebid.chinatowercom.cn/
+    env_username: TOWER_USERNAME
+    env_password: TOWER_PASSWORD
+    has_captcha: true
+    captcha_type: image
+    login_required: true
+
+  - id: csg
+    name: 中国南方电网电子采购交易平台
+    url: https://ecsg.com.cn/
+    env_username: CSG_USERNAME
+    env_password: CSG_PASSWORD
+    has_captcha: true
+    captcha_type: image
+    login_required: true
+
+  - id: sgcc
+    name: 国家电网电子商务平台
+    url: https://ecp.sgcc.com.cn/
+    env_username: SGCC_USERNAME
+    env_password: SGCC_PASSWORD
+    has_captcha: true
+    captcha_type: image
+    login_required: true
+
+  - id: scbid
+    name: 四川招投标网
+    url: http://www.scbid.com/zh/news/web_zbxx_6.shtml
+    env_username: SCBID_USERNAME
+    env_password: SCBID_PASSWORD
+    has_captcha: false
+    captcha_type: none
+    login_required: false
+
+  - id: unicom
+    name: 中国联通合作方门户
+    url: https://www.chinaunicombidding.cn/
+    env_username: UNICOM_USERNAME
+    env_password: UNICOM_PASSWORD
+    has_captcha: true
+    captcha_type: image
+    login_required: false
+
+  - id: telecom
+    name: 中国电信阳光采购网
+    url: https://caigou.chinatelecom.com.cn/
+    has_captcha: false
+    captcha_type: none
+    login_required: false
+
+
