@@ -47,12 +47,12 @@ class ChinaBiddingScraper(BaseScraper):
         from scrapling import StealthyFetcher
 
         items: list[TenderItem] = []
-        page_num = 1
         seen_hrefs: set[str] = set()
-        empty_page_count = 0
-        MAX_EMPTY_PAGES = 10
+        MAX_PAGES = 50
+        PAGE_SIZE = 30
+        today = datetime.now().date()
 
-        while True:
+        for page_num in range(1, MAX_PAGES + 1):
             url = f"https://www.chinabidding.cn/public/yjsc/html/zbcg_search.html?keywords={quote(keyword)}&page={page_num}"
 
             page_data: list[dict] = []
@@ -108,16 +108,18 @@ class ChinaBiddingScraper(BaseScraper):
                 if not page_data:
                     break
 
-                page_has_old = False
                 page_matched = 0
-                all_seen = True
+                page_new = 0
+                page_raw_new = 0
+                page_has_today = False
                 for row in page_data:
                     date_str = row.get("date", "")
-                    if date_str and since:
+                    if date_str:
                         try:
                             item_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-                            if item_date < since.date():
-                                page_has_old = True
+                            if item_date >= today:
+                                page_has_today = True
+                            if since and item_date < since.date():
                                 continue
                         except ValueError:
                             pass
@@ -132,9 +134,13 @@ class ChinaBiddingScraper(BaseScraper):
 
                     if href in seen_hrefs:
                         continue
-                    all_seen = False
                     seen_hrefs.add(href)
+                    page_raw_new += 1
 
+                    if "/zbgg/" not in href:
+                        continue
+
+                    page_new += 1
                     items.append(TenderItem(
                         date=date_str or datetime.now().strftime("%Y-%m-%d"),
                         category=category,
@@ -150,24 +156,23 @@ class ChinaBiddingScraper(BaseScraper):
                     ))
                     page_matched += 1
 
-                self.logger.info(f"  Page {page_num}: {len(page_data)} raw, {page_matched} matched keyword")
+                self.logger.info(f"  Page {page_num}: {len(page_data)} raw, {page_matched} zbgg matched, {page_raw_new} raw new, today={page_has_today}")
 
-                if since and page_has_old:
+                # Stop if last page is not full (no more results)
+                if len(page_data) < PAGE_SIZE:
+                    self.logger.info(f"  Last page {page_num} not full ({len(page_data)}/{PAGE_SIZE}), stopping")
                     break
 
-                if all_seen:
-                    self.logger.info(f"  All items on page {page_num} already seen, stopping")
+                # Stop if all raw items are duplicates — chinabidding recycles content beyond real results
+                if page_raw_new == 0:
+                    self.logger.info(f"  All raw duplicates on page {page_num}, stopping")
                     break
 
-                if page_matched == 0:
-                    empty_page_count += 1
-                    if empty_page_count >= MAX_EMPTY_PAGES:
-                        self.logger.info(f"  {MAX_EMPTY_PAGES} consecutive empty pages, stopping")
-                        break
-                else:
-                    empty_page_count = 0
+                # Stop if this page has no items published today — all newer content exhausted
+                if not page_has_today:
+                    self.logger.info(f"  No today's items on page {page_num}, stopping")
+                    break
 
-                page_num += 1
             except Exception as e:
                 self.logger.error(f"Scrapling search failed for '{keyword}' page {page_num}: {e}")
                 break
@@ -297,23 +302,32 @@ class ChinaBiddingScraper(BaseScraper):
             ChinaBiddingScraper._pool = concurrent.futures.ThreadPoolExecutor(max_workers=7)
 
         results: list[TenderItem] = []
+        loop = asyncio.get_event_loop()
 
+        async def search_one(keyword: str, category: str):
+            self.logger.info(f"Searching {self.site_name}: [{category}] {keyword}")
+            try:
+                items = await loop.run_in_executor(
+                    ChinaBiddingScraper._pool,
+                    self._scrapling_search,
+                    keyword,
+                    category,
+                    since,
+                )
+                self.logger.info(f"Found {len(items)} items for [{category}] {keyword}")
+                return items
+            except Exception as e:
+                self.logger.error(f"Search failed for [{category}] {keyword}: {e}")
+                return []
+
+        tasks = []
         for category, keywords in keywords_by_category.items():
             for keyword in keywords:
-                self.logger.info(f"Searching {self.site_name}: [{category}] {keyword}")
-                try:
-                    loop = asyncio.get_event_loop()
-                    items = await loop.run_in_executor(
-                        ChinaBiddingScraper._pool,
-                        self._scrapling_search,
-                        keyword,
-                        category,
-                        since,
-                    )
-                    results.extend(items)
-                    self.logger.info(f"Found {len(items)} items for [{category}] {keyword}")
-                except Exception as e:
-                    self.logger.error(f"Search failed for [{category}] {keyword}: {e}")
+                tasks.append(search_one(keyword, category))
+
+        all_results = await asyncio.gather(*tasks)
+        for items in all_results:
+            results.extend(items)
 
         return results
 
@@ -326,12 +340,21 @@ class ChinaBiddingScraper(BaseScraper):
         if not hasattr(ChinaBiddingScraper, '_pool'):
             ChinaBiddingScraper._pool = concurrent.futures.ThreadPoolExecutor(max_workers=7)
 
+        NUM_BATCHES = min(4, len(items))
+        batch_size = (len(items) + NUM_BATCHES - 1) // NUM_BATCHES
+        batches = [items[i:i+batch_size] for i in range(0, len(items), batch_size)]
+        self.logger.info(f"Split into {len(batches)} batches of ~{batch_size} items each")
+
         loop = asyncio.get_event_loop()
-        items = await loop.run_in_executor(
-            ChinaBiddingScraper._pool,
-            self._scrapling_fetch_details,
-            items,
-        )
+        futures = [
+            loop.run_in_executor(ChinaBiddingScraper._pool, self._scrapling_fetch_details, batch)
+            for batch in batches
+        ]
+        results = await asyncio.gather(*futures)
+
+        items = []
+        for batch in results:
+            items.extend(batch)
         return items
 
     @staticmethod

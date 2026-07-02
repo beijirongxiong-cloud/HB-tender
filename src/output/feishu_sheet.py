@@ -242,6 +242,40 @@ class FeishuSpreadsheetClient:
             logger.info("No records to write")
             return True
 
+        # Deduplicate by project URL before writing
+        seen_urls: set[str] = set()
+        seen_title_keys: set[str] = set()
+        unique_records: list[dict] = []
+        dup_count = 0
+        for r in records:
+            name_field = r.get("项目名称", "")
+            url = ""
+            if isinstance(name_field, dict):
+                url = name_field.get("link", "")
+            if url and url in seen_urls:
+                dup_count += 1
+                continue
+            if url:
+                seen_urls.add(url)
+
+            title_text = name_field.get("text", name_field) if isinstance(name_field, dict) else str(name_field)
+            org = str(r.get("招标单位", ""))
+            title_key = (title_text[:20], org[:10])
+            if title_key in seen_title_keys:
+                dup_count += 1
+                continue
+            seen_title_keys.add(title_key)
+
+            unique_records.append(r)
+
+        if dup_count > 0:
+            logger.info(f"Dedup: {len(records)} -> {len(unique_records)} (removed {dup_count} duplicates)")
+        records = unique_records
+
+        if not records:
+            logger.info("No unique records to write after dedup")
+            return True
+
         if not self._ensure_spreadsheet():
             return False
         self._read_header()

@@ -33,7 +33,9 @@ class ScbidScraper(ScraplingScraper):
                             continue
                         seen_links.add(href)
                         # Skip non-tender announcements
-                        skip_words = ["成交公告", "结果公告", "中标公告", "废标公告", "终止公告"]
+                        skip_words = ["成交公告", "结果公告", "中标公告", "废标公告", "终止公告",
+                                      "采购预告", "事前公示", "意向公示", "需求公示", "前期公示",
+                                      "计划公示", "采购意向"]
                         if any(w in title for w in skip_words):
                             continue
 

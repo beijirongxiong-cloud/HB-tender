@@ -233,7 +233,7 @@ class TelecomScraper(ScraplingScraper):
                 publish_time = datetime.strptime(date_str[:10], "%Y-%m-%d")
             except ValueError:
                 return True
-        return publish_time >= now - timedelta(days=3)
+        return publish_time >= now - timedelta(days=1)
 
     @staticmethod
     def _format_datetime(dt_str: str) -> str:

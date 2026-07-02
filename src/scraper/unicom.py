@@ -15,7 +15,7 @@ class UnicomScraper(ScraplingScraper):
     LIST_API = "/api/v1/bizAnno/getAnnoList"
     DETAIL_API = "/api/v1/bizAnno/getAnnoDetailed"
     ANNO_TYPE_BID = "011002"
-    VALID_ANNO_TYPES = {"011002", "011001"}  # 011002=采购公告, 011001=招标公告
+    VALID_ANNO_TYPES = {"011002", "011001", "011003"}  # 011002=采购公告, 011001=招标公告, 011003=询比采购公告
     _ssl_ctx = None
 
     def _get_ssl_ctx(self):
@@ -73,7 +73,7 @@ class UnicomScraper(ScraplingScraper):
                         anno_type_id = rec.get("annoTypeId", "")
                         anno_type = rec.get("annoType", "")
                         # Client-side filter: only keep 采购公告/招标公告 (skip 结果/变更/终止)
-                        if anno_type_id not in self.VALID_ANNO_TYPES and anno_type not in ("采购公告", "招标公告"):
+                        if anno_type_id not in self.VALID_ANNO_TYPES and anno_type not in ("采购公告", "招标公告", "询比采购公告"):
                             continue
 
                         bid_company = rec.get("bidCompany", "").strip()

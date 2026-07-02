@@ -72,7 +72,9 @@ class CsgScraper(ScraplingScraper):
                     title = row.get("title", "").strip()
                     # Skip result/failure announcements
                     skip_words = ["成交结果", "中标公告", "失败公告", "流标公告", "终止公告",
-                                  "成交公告", "候选人公示", "结果公告", "中标候选人"]
+                                  "成交公告", "候选人公示", "结果公告", "中标候选人",
+                                  "采购预告", "事前公示", "意向公示", "需求公示", "前期公示",
+                                  "计划公示", "采购意向"]
                     if any(w in title for w in skip_words):
                         continue
 

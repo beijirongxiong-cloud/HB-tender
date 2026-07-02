@@ -1,0 +1,995 @@
+# =============================================================================
+# 全国招投标网站收录数据库 — 扩展版
+# =============================================================================
+# 版本: 2.0
+# 更新: 2026-07-01
+# 说明: 收录全国各省市公共资源交易中心、大型国企集团采购平台、
+#       专业招投标信息平台共131个网站，供逐步对接爬虫开发使用。
+#
+# 状态说明:
+#   active      - 已在 sites.yaml 中配置并运行
+#   priority    - 高优先级，建议下一批对接
+#   planned     - 已规划，待开发
+#   research    - 需进一步调研可行性
+# =============================================================================
+
+# =============================================================================
+# 第一类: 各省市公共资源交易中心 (68个)
+# =============================================================================
+provincial_trading_platforms:
+
+  # --- 直辖市 ---
+  - id: beijing-ggzy
+    name: 北京市公共资源交易服务平台
+    url: https://ggzyfw.beijing.gov.cn/
+    region: 北京
+    level: 直辖市
+    status: priority
+    notes: 统合北京市建设工程/政府采购，CA证书（北京CA）登录，公开浏览标题列表
+
+  - id: tianjin-ggzy
+    name: 天津市公共资源交易中心
+    url: https://ggzy.zwfwb.tj.gov.cn/
+    region: 天津
+    level: 直辖市
+    status: planned
+
+  - id: shanghai-ggzy
+    name: 上海市公共资源交易服务平台
+    url: https://www.shggzy.com/
+    region: 上海
+    level: 直辖市
+    status: priority
+    notes: 统一CA登录
+
+  - id: chongqing-ggzy
+    name: 重庆市公共资源交易网
+    url: https://www.cqggzy.com/
+    region: 重庆
+    level: 直辖市
+    status: planned
+    notes: 重庆联合产权交易所集团运营
+
+  # --- 省级平台 ---
+  - id: hebei-ggzy
+    name: 河北省公共资源交易服务平台
+    url: https://www.hebpr.gov.cn/
+    region: 河北
+    level: 省
+    status: planned
+    notes: 统合全省各地市
+
+  - id: shanxi-ggzy
+    name: 山西省公共资源交易平台
+    url: https://prec.sxzwfw.gov.cn/
+    region: 山西
+    level: 省
+    status: planned
+
+  - id: neimenggu-ggzy
+    name: 内蒙古自治区公共资源交易网
+    url: https://ggzyjy.nmg.gov.cn/
+    region: 内蒙古
+    level: 自治区
+    status: planned
+
+  - id: liaoning-ggzy
+    name: 辽宁省公共资源交易平台
+    url: https://www.lnggzy.gov.cn/
+    region: 辽宁
+    level: 省
+    status: planned
+
+  - id: jilin-ggzy
+    name: 吉林省公共资源交易公共服务平台
+    url: https://www.ggzyzx.jl.gov.cn/
+    region: 吉林
+    level: 省
+    status: planned
+
+  - id: heilongjiang-ggzy
+    name: 黑龙江省公共资源交易网
+    url: https://ggzyjyw.hlj.gov.cn/
+    region: 黑龙江
+    level: 省
+    status: planned
+
+  - id: jiangsu-ggzy
+    name: 江苏省公共资源交易平台
+    url: https://ggzy.jiangsu.gov.cn/
+    region: 江苏
+    level: 省
+    status: priority
+
+  - id: zhejiang-ggzy
+    name: 浙江省公共资源交易服务平台
+    url: https://ggzyjy.zj.gov.cn/
+    region: 浙江
+    level: 省
+    status: priority
+
+  - id: anhui-ggzy
+    name: 安徽省公共资源交易监管网
+    url: https://ggzy.ah.gov.cn/
+    region: 安徽
+    level: 省
+    status: planned
+
+  - id: fujian-ggzy
+    name: 福建省公共资源交易电子公共服务平台
+    url: https://ggzyfw.fj.gov.cn/
+    region: 福建
+    level: 省
+    status: planned
+
+  - id: jiangxi-ggzy
+    name: 江西省公共资源交易平台
+    url: https://www.jxsggzy.cn/
+    region: 江西
+    level: 省
+    status: planned
+
+  - id: shandong-ggzy
+    name: 山东省公共资源交易中心
+    url: https://ggzyjy.shandong.gov.cn/
+    region: 山东
+    level: 省
+    status: priority
+
+  - id: henan-ggzy
+    name: 河南省公共资源交易中心
+    url: https://hnsggzyjy.henan.gov.cn/
+    region: 河南
+    level: 省
+    status: planned
+
+  - id: hubei-ggzy
+    name: 湖北省公共资源交易平台
+    url: https://www.hbbidcloud.cn/
+    region: 湖北
+    level: 省
+    status: priority
+    notes: "湖北省电子招投标交易云平台"
+
+  - id: hunan-ggzy
+    name: 湖南省公共资源交易服务平台
+    url: https://ggzy.hunan.gov.cn/
+    region: 湖南
+    level: 省
+    status: planned
+
+  - id: guangdong-ggzy
+    name: 广东省公共资源交易平台
+    url: https://ygp.gdzwfw.gov.cn/
+    region: 广东
+    level: 省
+    status: priority
+    notes: "粤公平"统一平台
+
+  - id: guangxi-ggzy
+    name: 广西壮族自治区公共资源交易中心
+    url: https://gxggzy.gxzf.gov.cn/
+    region: 广西
+    level: 自治区
+    status: planned
+
+  - id: hainan-ggzy
+    name: 海南省公共资源交易服务中心
+    url: https://ggzy.hainan.gov.cn/
+    region: 海南
+    level: 省
+    status: planned
+
+  - id: sichuan-ggzy
+    name: 四川省公共资源交易信息网
+    url: https://ggzyjy.sc.gov.cn/
+    region: 四川
+    level: 省
+    status: planned
+    notes: 已有 scbid.com 覆盖部分，此为官方政府平台
+
+  - id: guizhou-ggzy
+    name: 贵州省公共资源交易云
+    url: https://ggzy.guizhou.gov.cn/
+    region: 贵州
+    level: 省
+    status: planned
+
+  - id: yunnan-ggzy
+    name: 云南省公共资源交易信息网
+    url: https://ggzy.yn.gov.cn/
+    region: 云南
+    level: 省
+    status: planned
+
+  - id: xizang-ggzy
+    name: 西藏自治区公共资源交易平台
+    url: https://ggzy.xizang.gov.cn/
+    region: 西藏
+    level: 自治区
+    status: planned
+
+  - id: shaanxi-ggzy
+    name: 陕西省公共资源交易中心
+    url: https://www.sxggzyjy.cn/
+    region: 陕西
+    level: 省
+    status: planned
+
+  - id: gansu-ggzy
+    name: 甘肃省公共资源交易平台
+    url: https://ggzyjy.gansu.gov.cn/
+    region: 甘肃
+    level: 省
+    status: planned
+
+  - id: qinghai-ggzy
+    name: 青海省公共资源交易网
+    url: https://www.qhggzyjy.gov.cn/
+    region: 青海
+    level: 省
+    status: planned
+
+  - id: ningxia-ggzy
+    name: 宁夏回族自治区公共资源交易网
+    url: https://www.nxggzyjy.org/
+    region: 宁夏
+    level: 自治区
+    status: planned
+
+  - id: xinjiang-ggzy
+    name: 新疆维吾尔自治区公共资源交易平台
+    url: https://ggzy.xinjiang.gov.cn/
+    region: 新疆
+    level: 自治区
+    status: planned
+
+  - id: xjbt-ggzy
+    name: 新疆生产建设兵团公共资源交易信息网
+    url: https://ggzy.xjbt.gov.cn/
+    region: 新疆兵团
+    level: 省级
+    status: planned
+
+  # --- 重点城市 ---
+  - id: shenzhen-ggzy
+    name: 深圳公共资源交易中心
+    url: https://www.szggzy.com/
+    region: 广东-深圳
+    level: 计划单列市
+    status: priority
+    notes: 全国规模最大的公共资源交易平台之一
+
+  - id: guangzhou-ggzy
+    name: 广州公共资源交易中心
+    url: http://www.gzggzy.cn/
+    region: 广东-广州
+    level: 省会
+    status: priority
+
+  - id: chengdu-ggzy
+    name: 成都市公共资源交易服务中心
+    url: https://www.cdggzy.com/
+    region: 四川-成都
+    level: 省会
+    status: planned
+
+  - id: wuhan-ggzy
+    name: 武汉市公共资源交易平台
+    url: https://www.whzbtb.com/
+    region: 湖北-武汉
+    level: 省会
+    status: planned
+
+  - id: hangzhou-ggzy
+    name: 杭州市公共资源交易网
+    url: https://ggzy.hangzhou.gov.cn/
+    region: 浙江-杭州
+    level: 省会
+    status: planned
+
+  - id: nanjing-ggzy
+    name: 南京市公共资源交易中心
+    url: http://njggzy.nanjing.gov.cn/
+    region: 江苏-南京
+    level: 省会
+    status: planned
+
+  - id: xian-ggzy
+    name: 西安市公共资源交易中心
+    url: http://xaggzy.xa.gov.cn/
+    region: 陕西-西安
+    level: 省会
+    status: planned
+
+  - id: jinan-ggzy
+    name: 济南公共资源交易中心
+    url: http://jnggzy.jinan.gov.cn/
+    region: 山东-济南
+    level: 省会
+    status: planned
+
+  - id: qingdao-ggzy
+    name: 青岛市公共资源交易网
+    url: https://ggzy.qingdao.gov.cn/
+    region: 山东-青岛
+    level: 计划单列市
+    status: planned
+
+  - id: ningbo-ggzy
+    name: 宁波市公共资源交易网
+    url: http://www.nbggzy.cn/
+    region: 浙江-宁波
+    level: 计划单列市
+    status: planned
+
+  - id: xiamen-ggzy
+    name: 厦门市公共资源交易网
+    url: https://ggzy.xm.gov.cn/
+    region: 福建-厦门
+    level: 计划单列市
+    status: planned
+
+  - id: dalian-ggzy
+    name: 大连市公共资源交易平台
+    url: https://ggzyjy.dl.gov.cn/
+    region: 辽宁-大连
+    level: 计划单列市
+    status: planned
+
+  - id: suzhou-ggzy
+    name: 苏州市公共资源交易中心
+    url: http://www.szzyjy.com.cn/
+    region: 江苏-苏州
+    level: 地级市
+    status: planned
+
+  - id: hefei-ggzy
+    name: 合肥市公共资源交易中心
+    url: https://ggzy.hefei.gov.cn/
+    region: 安徽-合肥
+    level: 省会
+    status: planned
+
+  - id: fuzhou-ggzy
+    name: 福州市公共资源交易网
+    url: https://fzsggzyjyfwzx.cn/
+    region: 福建-福州
+    level: 省会
+    status: planned
+
+  - id: nanchang-ggzy
+    name: 南昌市公共资源交易网
+    url: http://ncztb.nc.gov.cn/
+    region: 江西-南昌
+    level: 省会
+    status: planned
+
+  - id: zhengzhou-ggzy
+    name: 郑州市公共资源交易中心
+    url: https://zzggzy.zhengzhou.gov.cn/
+    region: 河南-郑州
+    level: 省会
+    status: planned
+
+  - id: changsha-ggzy
+    name: 长沙市公共资源交易中心
+    url: http://fwpt.csggzy.cn/
+    region: 湖南-长沙
+    level: 省会
+    status: planned
+
+  - id: nanning-ggzy
+    name: 南宁市公共资源交易中心
+    url: https://www.nnggzy.org.cn/
+    region: 广西-南宁
+    level: 省会
+    status: planned
+
+  - id: guiyang-ggzy
+    name: 贵阳市公共资源交易中心
+    url: https://ggzy.guiyang.gov.cn/
+    region: 贵州-贵阳
+    level: 省会
+    status: planned
+
+  - id: kunming-ggzy
+    name: 昆明市公共资源交易平台
+    url: https://ggzy.km.gov.cn/
+    region: 云南-昆明
+    level: 省会
+    status: planned
+
+  - id: lanzhou-ggzy
+    name: 兰州市公共资源交易中心
+    url: http://lzggzyjy.lanzhou.gov.cn/
+    region: 甘肃-兰州
+    level: 省会
+    status: planned
+
+  - id: shenyang-ggzy
+    name: 沈阳市公共资源交易网
+    url: http://ggzy.shenyang.gov.cn/
+    region: 辽宁-沈阳
+    level: 省会
+    status: planned
+
+  - id: changchun-ggzy
+    name: 长春市公共资源交易网
+    url: https://www.ccggzy.com.cn/
+    region: 吉林-长春
+    level: 省会
+    status: planned
+
+  - id: haerbin-ggzy
+    name: 哈尔滨市公共资源交易中心
+    url: http://www.hrbggzy.org.cn/
+    region: 黑龙江-哈尔滨
+    level: 省会
+    status: planned
+
+  - id: dongguan-ggzy
+    name: 东莞市公共资源交易网
+    url: http://ggzy.dg.gov.cn/
+    region: 广东-东莞
+    level: 地级市
+    status: planned
+
+  - id: foshan-ggzy
+    name: 佛山市公共资源交易网
+    url: https://ggzy.foshan.gov.cn/
+    region: 广东-佛山
+    level: 地级市
+    status: planned
+
+
+# =============================================================================
+# 第二类: 大型国企集团采购平台 (45个，含已覆盖)
+# =============================================================================
+soe_procurement_platforms:
+
+  # --- 能源/电力类 ---
+  - id: cnpc-bidding
+    name: 中国石油电子招标投标交易平台
+    url: https://ebidmanage.cnpcbidding.com/
+    group: 中国石油天然气集团
+    industry: 能源/石油
+    status: priority
+    notes: 需CA数字证书（中石油U-Key），部分项目公开浏览
+
+  - id: sinopec-ebidding
+    name: 中国石化电子招标投标交易平台
+    url: https://ebidding.sinopec.com/
+    group: 中国石油化工集团
+    industry: 能源/石化
+    status: priority
+    notes: 供应商需入库注册，CA证书
+
+  - id: cnooc-buy
+    name: 中国海洋石油集团采办业务系统
+    url: https://buy.cnooc.com.cn/
+    group: 中国海洋石油集团
+    industry: 能源/海洋石油
+    status: priority
+
+  - id: datang-ec
+    name: 中国大唐集团电子商城
+    url: https://www.cdt-ec.com/
+    group: 中国大唐集团
+    industry: 电力/能源
+    status: planned
+
+  - id: huadian-ec
+    name: 中国华电集团电子商务平台
+    url: https://www.chdtp.com/
+    group: 中国华电集团
+    industry: 电力/能源
+    status: planned
+
+  - id: spic-ebid
+    name: 国家电投电子商务平台
+    url: https://ebid.espic.com.cn/
+    group: 国家电力投资集团
+    industry: 电力/能源
+    status: planned
+
+  - id: cgnpc-ecp
+    name: 中广核电子商务平台
+    url: https://ecp.cgnpc.com.cn/
+    group: 中国广核集团
+    industry: 核电/能源
+    status: planned
+
+  - id: ceec-ec
+    name: 中国能源建设集团电子采购平台
+    url: https://ec.ceec.net.cn/
+    group: 中国能源建设集团
+    industry: 电力/能源/基建
+    status: planned
+
+  # --- 建筑/基建类 ---
+  - id: cscec-yzw
+    name: 中国建筑云筑网
+    url: https://www.yzw.cn/
+    group: 中国建筑集团
+    industry: 建筑
+    status: priority
+    notes: 中建集采平台，分为云筑集采、云筑劳务
+
+  - id: crec-gec
+    name: 中国中铁采购电子商务平台
+    url: http://www.crecgec.com/
+    group: 中国中铁
+    industry: 铁路/基建
+    status: priority
+    notes: 鲁班平台（中铁鲁班商务网）
+
+  - id: crcc-ecp
+    name: 中国铁建物资采购网
+    url: https://www.crccep.com/
+    group: 中国铁建
+    industry: 铁路/基建
+    status: priority
+
+  - id: powerchina-ec
+    name: 中国电建设备物资集中采购平台
+    url: https://ec.powerchina.cn/
+    group: 中国电力建设集团
+    industry: 电力/水电
+    status: planned
+
+  # --- 交通/制造类 ---
+  - id: crrc-go
+    name: 中国中车供应链管理平台
+    url: https://www.crrcgo.cc/
+    group: 中国中车
+    industry: 轨道交通
+    status: planned
+
+  - id: avic-ec
+    name: 中国航空工业电子采购平台
+    url: https://www.eavic.com/
+    group: 中国航空工业集团
+    industry: 航空/军工
+    status: planned
+    notes: 军工涉密项目不公开
+
+  - id: norinco-ebuy
+    name: 中国兵器电子招标投标交易平台
+    url: https://www.norincogroup-ebuy.com/
+    group: 中国兵器工业集团
+    industry: 军工
+    status: planned
+
+  - id: csgc-ebuy
+    name: 中国船舶采购管理平台
+    url: https://www.ebuy.csgc.com.cn/
+    group: 中国船舶集团
+    industry: 船舶/军工
+    status: planned
+
+  - id: comac-ec
+    name: 中国商飞电子采购平台
+    url: https://www.comac.cc/
+    group: 中国商用飞机
+    industry: 航空制造
+    status: planned
+
+  - id: aecc-mall
+    name: 中国航发网上商城
+    url: https://www.aecc-mall.com/
+    group: 中国航空发动机集团
+    industry: 航空发动机
+    status: planned
+
+  # --- 钢铁/矿业类 ---
+  - id: baowu-ouyeel
+    name: 中国宝武采购平台（欧冶采购）
+    url: https://www.ouyeel.com/
+    group: 中国宝武钢铁集团
+    industry: 钢铁
+    status: priority
+
+  - id: ansteel-bid
+    name: 鞍钢集团电子招标投标交易平台
+    url: https://bid.ansteel.cn/
+    group: 鞍钢集团
+    industry: 钢铁
+    status: planned
+
+  - id: shougang-ec
+    name: 首钢集团电子采购平台
+    url: https://www.sggylpt.com/
+    group: 首钢集团
+    industry: 钢铁
+    status: planned
+
+  - id: hbis-sc
+    name: 河钢集团供应链管理平台
+    url: https://www.hbisco.com/
+    group: 河钢集团
+    industry: 钢铁
+    status: planned
+
+  - id: minmetals-ec
+    name: 中国五矿集团采购电子商务平台
+    url: https://ec.minmetals.com.cn/
+    group: 中国五矿集团
+    industry: 矿业/金属
+    status: planned
+
+  - id: chalco-ec
+    name: 中国铝业电子采购平台
+    url: https://www.chalco.com.cn/
+    group: 中国铝业集团
+    industry: 有色金属
+    status: planned
+
+  - id: cnmc-ec
+    name: 中国有色集团采购招标平台
+    url: https://www.cnmc.com.cn/
+    group: 中国有色矿业集团
+    industry: 有色金属/矿业
+    status: planned
+
+  - id: chinagold-ec
+    name: 中国黄金集团电子招标商务平台
+    url: https://www.chinagoldgroup.com/
+    group: 中国黄金集团
+    industry: 矿业/贵金属
+    status: planned
+
+  - id: chinacoal-ec
+    name: 中煤集团采购平台
+    url: https://www.chinacoal.com/
+    group: 中国中煤能源集团
+    industry: 煤炭
+    status: planned
+
+  - id: ccteg-ec
+    name: 中国煤炭科工集团电子采购平台
+    url: https://www.ccteg.cn/
+    group: 中国煤炭科工集团
+    industry: 煤炭/矿机
+    status: planned
+
+  # --- 化工/建材类 ---
+  - id: cncec-yc
+    name: 中国化学工程集团电子招标平台
+    url: https://www.cncecyc.com/
+    group: 中国化学工程集团
+    industry: 化工/工程
+    status: planned
+    notes: 化学云采网
+
+  - id: cnbm-ec
+    name: 中国建材集团采购平台
+    url: https://www.cnbm.com.cn/
+    group: 中国建材集团
+    industry: 建材
+    status: planned
+
+  - id: sinochem-ec
+    name: 中国中化电子采购平台
+    url: https://www.sinochem.com/
+    group: 中国中化控股
+    industry: 化工/农业
+    status: planned
+
+  # --- 通信/电子类 ---
+  - id: cec-ec
+    name: 中国电子采购平台（CEC）
+    url: https://www.cec-ec.com.cn/
+    group: 中国电子信息产业集团
+    industry: 电子信息
+    status: planned
+
+  - id: crsc-ec
+    name: 中国通号采购电子商务平台
+    url: https://www.crsc.cn/
+    group: 中国铁路通信信号集团
+    industry: 轨道交通/通信
+    status: planned
+
+  - id: chinasatcom-ec
+    name: 中国星网采购平台
+    url: https://www.chinasatcom.com/
+    group: 中国卫星网络集团
+    industry: 卫星通信
+    status: planned
+
+  # --- 综合/物流/其他 ---
+  - id: china-railway-95306
+    name: 国铁采购平台
+    url: https://cg.95306.cn/
+    group: 中国国家铁路集团
+    industry: 铁路
+    status: priority
+    notes: 国铁集团统一物资采购平台
+
+  - id: chinapost-cg
+    name: 中国邮政电子采购与供应平台
+    url: https://cg.11185.cn/
+    group: 中国邮政集团
+    industry: 邮政/物流
+    status: planned
+
+  - id: tobacco-bidding
+    name: 中国烟草总公司招标采购
+    url: https://www.tobacco.gov.cn/
+    group: 中国烟草总公司
+    industry: 烟草专卖
+    status: planned
+    notes: 各省市烟草公司独立发布
+
+  - id: cmlg-ec
+    name: 中国物流集团采购平台
+    url: https://www.chinalogisticsgroup.com.cn/
+    group: 中国物流集团
+    industry: 物流
+    status: planned
+
+  - id: rongtong-ec
+    name: 中国融通集团电子商务平台
+    url: https://www.rongtonggroup.cn/
+    group: 中国融通集团
+    industry: 资产管理
+    status: planned
+
+  - id: ciesco-dzzb
+    name: 招商局集团电子招标采购交易平台
+    url: https://dzzb.ciesco.com.cn/
+    group: 招商局集团
+    industry: 综合/港口/金融
+    status: priority
+
+  - id: crc-szecp
+    name: 华润集团守正电子招标平台
+    url: https://szecp.crc.com.cn/
+    group: 华润集团
+    industry: 综合/消费品/电力/地产
+    status: priority
+
+  - id: chinasalt-ec
+    name: 中国盐业集团电子采购平台
+    url: https://www.chinasalt.com.cn/
+    group: 中国盐业集团
+    industry: 盐业
+    status: planned
+
+  - id: cfgc-ec
+    name: 中国林业集团采购平台
+    url: https://www.cfgc.cn/
+    group: 中国林业集团
+    industry: 林业
+    status: planned
+
+  - id: cnadc-ec
+    name: 中国农业发展集团采购平台
+    url: https://www.cnadc.com.cn/
+    group: 中国农业发展集团
+    industry: 农业
+    status: planned
+
+  - id: crhc-ec
+    name: 中国国新电子采购平台
+    url: https://www.crhc.cn/
+    group: 中国国新控股
+    industry: 国有资本运营
+    status: planned
+
+
+# =============================================================================
+# 第三类: 专业招投标信息平台 (18个)
+# =============================================================================
+professional_platforms:
+
+  # --- 官方公告平台 ---
+  - id: cebpubservice
+    name: 中国招标投标公共服务平台
+    url: https://www.cebpubservice.com/
+    category: 官方公告平台
+    status: priority
+    notes: 国家发改委指定发布媒介，法定公告免费公开，API可能开放
+
+  - id: ccgp
+    name: 中国政府采购网
+    url: https://www.ccgp.gov.cn/
+    category: 政府采购
+    status: priority
+    notes: 财政部指定政府采购信息发布媒体，全国统一平台，信息免费
+
+  - id: zycg
+    name: 中央政府采购网
+    url: https://www.zycg.gov.cn/
+    category: 政府采购
+    status: planned
+    notes: 中央国家机关政府采购中心
+
+  - id: plap
+    name: 军队采购网
+    url: https://www.plap.cn/
+    category: 军队采购
+    status: research
+    notes: 军队物资采购信息发布，部分涉密
+
+  # --- 综合标讯聚合平台（商业） ---
+  - id: qianlima
+    name: 千里马招标网
+    url: https://www.qianlima.com/
+    category: 综合标讯聚合
+    status: priority
+    notes: 老牌标讯平台，覆盖全国，VIP会员制
+
+  - id: bidcenter
+    name: 采招网
+    url: https://www.bidcenter.com.cn/
+    category: 综合标讯聚合
+    status: priority
+    notes: 全国各省市分站，有API数据接口服务
+
+  - id: okcis
+    name: 招标采购导航网
+    url: https://www.okcis.cn/
+    category: 综合标讯聚合
+    status: planned
+    notes: 全国招标采购信息搜索订阅
+
+  - id: zhaobiao
+    name: 招标雷达
+    url: https://www.zhaobiao.com.cn/
+    category: 综合标讯聚合
+    status: planned
+    notes: AI智能推荐标讯，企业画像分析
+
+  - id: jianyu360
+    name: 剑鱼标讯
+    url: https://www.jianyu360.com/
+    category: 综合标讯聚合
+    status: planned
+
+  - id: bitbid
+    name: 比比网
+    url: https://www.bitbid.cn/
+    category: 综合标讯聚合
+    status: planned
+    notes: 山西省重点支持平台，扩展至全国
+
+  # --- 机电产品国际招标 ---
+  - id: chinabidding-com
+    name: 机电产品招标投标电子交易平台
+    url: https://www.chinabidding.com/
+    category: 机电产品国际招标
+    status: planned
+    notes: 商务部指定机电产品国际招标平台
+
+  - id: ebnew
+    name: 必联网
+    url: https://www.ebnew.com/
+    category: 机电产品国际招标
+    status: planned
+    notes: 与 chinabidding.com 同一集团运营
+
+  # --- 建筑工程标讯 ---
+  - id: tgnet
+    name: 天工网（建设通）
+    url: https://www.tgnet.com/
+    category: 建筑工程标讯
+    status: planned
+    notes: 专注建筑工程领域招标信息
+
+  - id: lubanyb
+    name: 鲁班乐标
+    url: https://www.lubanyb.com/
+    category: 建筑工程标讯
+    status: planned
+    notes: 建筑行业招投标大数据平台
+
+  # --- 电子招投标SaaS平台 ---
+  - id: trade365
+    name: 中招联合招标采购平台
+    url: https://www.365trade.com.cn/
+    category: 电子招投标SaaS平台
+    status: priority
+    notes: 中招国际旗下SaaS平台，众多央企和地方国企使用
+
+  - id: e-bidding
+    name: 国信e采招标投标交易平台
+    url: https://www.e-bidding.org/
+    category: 电子招投标SaaS平台
+    status: priority
+    notes: 国信招标集团旗下，很多大型企业用此系统
+
+  - id: youzhicai
+    name: 优质采电子交易平台
+    url: https://www.youzhicai.com/
+    category: 电子招投标SaaS平台
+    status: priority
+    notes: 安徽省招标集团旗下，全国推广SaaS平台
+
+  # --- 企业信息+标讯 ---
+  - id: qcc
+    name: 企查查/天眼查招标板块
+    url: https://www.qcc.com/
+    category: 企业信息+标讯
+    status: planned
+    notes: 聚合自全国多个平台，会员制，可作为补充数据源
+
+
+# =============================================================================
+# 对接优先级建议 (Priority Roadmap)
+# =============================================================================
+roadmap:
+  phase_1_immediate:
+    description: 立即对接 — 数据量大、免费或易获取
+    sites:
+      - cebpubservice    # 中国招标投标公共服务平台（法定公告源）
+      - ccgp             # 中国政府采购网（全国免费）
+      - trade365         # 中招联合SaaS（多个央企汇集）
+      - e-bidding        # 国信e采SaaS（多个央企汇集）
+      - youzhicai        # 优质采SaaS（多个央企汇集）
+
+  phase_2_short_term:
+    description: 短期对接 — 关键省市和大央企
+    sites:
+      - beijing-ggzy, shanghai-ggzy, guangdong-ggzy, shenzhen-ggzy
+      - jiangsu-ggzy, zhejiang-ggzy, shandong-ggzy, hubei-ggzy
+      - cnpc-bidding, sinopec-ebidding, cnooc-buy
+      - cscec-yzw, crec-gec, crcc-ecp
+      - china-railway-95306, ciesco-dzzb, crc-szecp
+      - qianlima, bidcenter
+
+  phase_3_medium_term:
+    description: 中期对接 — 其他省份和国企
+    sites:
+      - 其余26个省级公共资源交易平台
+      - 重点城市（广州、成都、武汉、杭州、南京等）
+      - 其他央企集团平台（大唐、华电、国家电投、中广核等）
+      - 其他专业平台（okcis、zhaobiao、jianyu360等）
+
+  phase_4_long_term:
+    description: 长期对接 — 补充覆盖
+    sites:
+      - 各地级市公共资源交易平台
+      - 其他国企集团平台
+      - 军队采购网（需评估可行性）
+
+
+# =============================================================================
+# 技术对接策略
+# =============================================================================
+technical_strategy:
+  gov_platforms:
+    description: 政府公共资源交易平台
+    common_patterns:
+      - 多数采用江苏国泰新点/北京筑龙/广联达等第三方系统
+      - 列表页通常无需登录即可浏览标题和摘要
+      - 详情页可能需要CA证书登录
+      - 有WAF反爬（Cloudflare/阿里云WAF）
+    approach:
+      - 优先尝试API接口（部分平台有开放API）
+      - 使用Scrapling/Playwright浏览器渲染
+      - 列表页抓取标题+链接即可，详情可选
+      - 可考虑RSS订阅（部分平台提供）
+
+  soe_platforms:
+    description: 央企集团采购平台
+    common_patterns:
+      - 大量使用第三方SaaS：国信e采、中招联合、优质采
+      - 统一对接SaaS平台可获得多家央企标讯
+      - 多数需要供应商注册登录
+    approach:
+      - 优先对接三个SaaS平台（trade365/e-bidding/youzhicai）
+      - 注册供应商账号获取查看权限
+      - 直接API调用优于浏览器渲染
+
+  commercial_platforms:
+    description: 商业标讯聚合平台
+    common_patterns:
+      - 数据量大、质量高、覆盖全面
+      - 核心数据需付费VIP
+      - 部分有付费API接口
+    approach:
+      - 评估付费API性价比
+      - 可先使用免费层级获取列表
+      - 与手动监控配合使用

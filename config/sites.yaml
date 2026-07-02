@@ -70,4 +70,33 @@ sites:
     captcha_type: none
     login_required: false
 
+  # ctbpsp blocked by captcha - disabled
+  # - id: ctbpsp
+  #   name: 中招联合招标采购网
+  #   url: https://ctbpsp.com/
+  #   has_captcha: true
+  #   captcha_type: image
+  #   login_required: false
+
+  - id: iccec
+    name: 中交招采网
+    url: https://sp.iccec.cn/
+    has_captcha: false
+    captcha_type: none
+    login_required: false
+
+  - id: chng
+    name: 华能电子商务平台
+    url: https://ec.chng.com.cn/
+    has_captcha: false
+    captcha_type: none
+    login_required: false
+
+  - id: chnenergy
+    name: 国能e招
+    url: http://www.chnenergybidding.com.cn/
+    has_captcha: false
+    captcha_type: none
+    login_required: false
+
 

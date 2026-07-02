@@ -20,6 +20,10 @@ from src.scraper.scbid import ScbidScraper
 from src.scraper.unicom import UnicomScraper
 from src.scraper.telecom import TelecomScraper
 from src.scraper.cnncecp import CnncecpScraper
+from src.scraper.ctbpsp import CtbpspScraper
+from src.scraper.iccec import IccecScraper
+from src.scraper.chng import ChngScraper
+from src.scraper.chnenergy import ChnenergyScraper
 
 from src.processor.filter import apply_blacklist, apply_keyword_strict_filter, apply_bid_result_filter
 from src.processor.dedup import deduplicate
@@ -43,6 +47,10 @@ SCRAPER_MAP = {
     "unicom": UnicomScraper,
     "telecom": TelecomScraper,
     "cnncecp": CnncecpScraper,
+    "ctbpsp": CtbpspScraper,
+    "iccec": IccecScraper,
+    "chng": ChngScraper,
+    "chnenergy": ChnenergyScraper,
 }
 
 
@@ -56,30 +64,37 @@ async def run_full_scrape():
 
     keywords_by_category = keywords_config["categories"]
     blacklist = keywords_config.get("blacklist", {})
-    since = datetime.now() - timedelta(days=3)
+    since = datetime.now() - timedelta(days=1)
 
-    # Step 1: Scrape all sites (sequentially to avoid anti-crawl)
+    # Step 1: Scrape all sites (parallel for speed, with concurrency limit)
     all_items: list[TenderItem] = []
     scrapers: dict[str, BaseScraper] = {}
 
-    for cfg in sites_config:
+    semaphore = asyncio.Semaphore(3)
+
+    async def scrape_one(cfg):
         scraper_cls = SCRAPER_MAP.get(cfg["id"])
         if not scraper_cls:
             logger.warning(f"Unknown site: {cfg['id']}")
-            continue
+            return [], None
         scraper = scraper_cls(cfg)
-        scrapers[scraper.site_name] = scraper
+        async with semaphore:
+            logger.info(f"--- Scraping {scraper.site_name} ---")
+            try:
+                items = await scraper.run(keywords_by_category, since)
+                logger.info(f"  {scraper.site_name}: got {len(items)} items")
+                all_items.extend(items)
+                scrapers[scraper.site_name] = scraper
+                import pickle
+                with open("data/raw_items.pkl", "wb") as f:
+                    pickle.dump(all_items, f)
+                logger.info(f"  Saved incremental raw items ({len(all_items)} total)")
+                return items, scraper
+            except Exception as e:
+                logger.error(f"  {scraper.site_name} FAILED: {e}")
+                return [], scraper
 
-        logger.info(f"--- Scraping {scraper.site_name} ---")
-        try:
-            items = await scraper.run(keywords_by_category, since)
-            logger.info(f"  {scraper.site_name}: got {len(items)} items")
-            all_items.extend(items)
-        except Exception as e:
-            logger.error(f"  {scraper.site_name} FAILED: {e}")
-
-        # Delay between sites to avoid anti-crawl detection
-        await asyncio.sleep(3)
+    await asyncio.gather(*[scrape_one(cfg) for cfg in sites_config])
 
     logger.info(f"Total raw items: {len(all_items)}")
 

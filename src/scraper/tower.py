@@ -1,5 +1,5 @@
 """Tower scraper - 中国铁塔电子采购平台, optimized: filter before detail fetch."""
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 import json
 import httpx
@@ -13,9 +13,14 @@ class TowerScraper(ScraplingScraper):
     PN = "/epointwebbuilder_zgtt"
     SITEGUID = "7eb5f7f1-9041-43ad-8e13-8fcb82ea831a"
     CLIENT_ID = "5223ad48-09b8-4839-8a6b-cb733d0d3468"
+    SINCE_DAYS = 1
 
     # 003001=招标/比选公告, 003002=变更公告
     VALID_CATEGORIES = ["003001", "003002"]
+
+    async def run(self, keywords_by_category: dict[str, list[str]], since=None) -> list[TenderItem]:
+        since = datetime.now() - timedelta(days=self.SINCE_DAYS)
+        return await super().run(keywords_by_category, since)
 
     def _get_token(self, client: httpx.Client) -> str:
         client.post(f"{self.PN}/rest/getOauthInfoAction/getAppInfo", data={"params": "{}"})
@@ -194,9 +199,17 @@ class TowerScraper(ScraplingScraper):
             parts = [keyword]
         return any(p in title for p in parts)
 
+    @staticmethod
+    def _simplify_keyword(keyword: str) -> str:
+        parts = [p.strip() for p in keyword.split("/") if len(p.strip()) >= 2]
+        if not parts:
+            parts = [keyword]
+        return parts[0][:2] if parts[0] and len(parts[0]) > 2 else parts[0]
+
     def _do_search(self, fetcher, keyword: str, category: str) -> list[TenderItem]:
         items: list[TenderItem] = []
         headers = {"User-Agent": "Mozilla/5.0", "X-Requested-With": "XMLHttpRequest"}
+        api_keyword = self._simplify_keyword(keyword)
         try:
             with httpx.Client(verify=False, timeout=30, base_url=self.BASE, headers=headers) as client:
                 token = self._get_token(client)
@@ -207,7 +220,7 @@ class TowerScraper(ScraplingScraper):
                     for page_idx in range(1, 11):
                         payload = {
                             "siteGuid": self.SITEGUID,
-                            "title": keyword,
+                            "title": api_keyword,
                             "categorynum": cat,
                             "beginDate": "",
                             "toDate": "",
@@ -237,7 +250,7 @@ class TowerScraper(ScraplingScraper):
                             seen_ids.add(info_id)
 
                             title = it.get("title", "").strip()
-                            if not self._keyword_matches(title, keyword):
+                            if not self._keyword_matches(title, api_keyword):
                                 continue
 
                             date_str = it.get("infodate", "")[:10]

@@ -31,9 +31,10 @@ def _extract_json(text: str) -> Optional[dict]:
 
 class LLMClient:
     def __init__(self):
-        self.api_key = os.getenv("VOLC_API_KEY", "")
-        self.base_url = os.getenv("VOLC_BASE_URL", "https://ark.cn-beijing.volces.com/api/coding/v3")
-        self.default_model = os.getenv("VOLC_SCREEN_MODEL", "deepseek-v4-flash")
+        # GPT provider takes priority if GPT_API_KEY is set
+        self.api_key = os.getenv("GPT_API_KEY") or os.getenv("VOLC_API_KEY", "")
+        self.base_url = os.getenv("GPT_BASE_URL", "https://api.openai.com/v1") if os.getenv("GPT_API_KEY") else os.getenv("VOLC_BASE_URL", "https://ark.cn-beijing.volces.com/api/coding/v3")
+        self.default_model = os.getenv("GPT_SCREEN_MODEL", "gpt-4o") if os.getenv("GPT_API_KEY") else os.getenv("VOLC_SCREEN_MODEL", "deepseek-v4-flash")
         self.timeout = 60
 
     async def chat_json(

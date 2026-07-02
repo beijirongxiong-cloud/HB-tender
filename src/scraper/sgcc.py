@@ -11,7 +11,7 @@ Efficiency strategy:
 """
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 import httpx
@@ -20,6 +20,8 @@ from src.scraper.scrapling_base import ScraplingScraper, TenderItem
 
 
 class SgccScraper(ScraplingScraper):
+    SINCE_DAYS = 1
+
     # Menu IDs on sgcc.com.cn for tender announcements (not bid results)
     # 2018032700291334 = 招标公告及投标邀请书
     # 2018032900295987 = 采购公告
@@ -33,14 +35,24 @@ class SgccScraper(ScraplingScraper):
     PORTAL_URL = "https://ecp.sgcc.com.cn/ecp2.0/portal/#/doc/"
     REFERER = "https://ecp.sgcc.com.cn/ecp2.0/portal/"
 
+    async def run(self, keywords_by_category: dict[str, list[str]], since=None) -> list[TenderItem]:
+        since = datetime.now() - timedelta(days=self.SINCE_DAYS)
+        return await super().run(keywords_by_category, since)
+
     def _do_search(self, fetcher, keyword: str, category: str) -> list[TenderItem]:
         items: list[TenderItem] = []
+
+        import os
+        for _k in ['HTTP_PROXY', 'HTTPS_PROXY', 'http_proxy', 'https_proxy', 'ALL_PROXY', 'all_proxy']:
+            os.environ.pop(_k, None)
+
         headers = {
             "Content-Type": "application/json",
             "Referer": self.REFERER,
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         }
         seen_ids: set[str] = set()
+        api_keyword = self._simplify_keyword(keyword)
 
         try:
             with httpx.Client(headers=headers, timeout=25, verify=False) as client:
@@ -54,7 +66,7 @@ class SgccScraper(ScraplingScraper):
                             "purOrgCode": "",
                             "noticeType": "",
                             "orgId": "",
-                            "key": keyword,
+                            "key": api_keyword,
                             "orgName": "",
                         }
                         r = client.post(self.SEARCH_URL, json=body)
@@ -82,7 +94,7 @@ class SgccScraper(ScraplingScraper):
                             if not title:
                                 continue
                             # List-page keyword pre-filter (efficiency: avoid detail fetch for non-matches)
-                            if keyword and not self._keyword_matches(title, keyword):
+                            if keyword and not self._keyword_matches(title, api_keyword):
                                 continue
 
                             org_name = n.get("publishOrgName", "") or ""
@@ -199,6 +211,14 @@ class SgccScraper(ScraplingScraper):
         if not parts:
             parts = [keyword]
         return any(p in title for p in parts)
+
+    @staticmethod
+    def _simplify_keyword(keyword: str) -> str:
+        """Extract first 2 chars for API search (e.g. '党建培训' -> '党建')."""
+        parts = [p.strip() for p in keyword.split("/") if len(p.strip()) >= 2]
+        if not parts:
+            parts = [keyword]
+        return parts[0][:2] if parts[0] and len(parts[0]) > 2 else parts[0]
 
     @staticmethod
     def _build_link(doctype: str, doc_id: str, menu_id: str, notice_id: str) -> str:

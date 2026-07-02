@@ -18,6 +18,10 @@ from src.scraper.scbid import ScbidScraper
 from src.scraper.unicom import UnicomScraper
 from src.scraper.telecom import TelecomScraper
 from src.scraper.cnncecp import CnncecpScraper
+from src.scraper.ctbpsp import CtbpspScraper
+from src.scraper.iccec import IccecScraper
+from src.scraper.chng import ChngScraper
+from src.scraper.chnenergy import ChnenergyScraper
 from src.processor.filter import apply_blacklist, apply_keyword_strict_filter, apply_bid_result_filter, load_blacklist
 from src.processor.dedup import deduplicate
 from src.processor.formatter import format_for_feishu
@@ -40,6 +44,10 @@ SCRAPER_MAP: dict[str, type[BaseScraper]] = {
     "unicom": UnicomScraper,
     "telecom": TelecomScraper,
     "cnncecp": CnncecpScraper,
+    "ctbpsp": CtbpspScraper,
+    "iccec": IccecScraper,
+    "chng": ChngScraper,
+    "chnenergy": ChnenergyScraper,
 }
 
 LAST_RUN_FILE = "data/last_run.json"
@@ -73,7 +81,7 @@ async def run_scrape(is_first_run: bool = False) -> None:
 
     since = None
     if is_first_run:
-        since = datetime.now() - timedelta(days=3)
+        since = datetime.now() - timedelta(days=1)
     else:
         since = get_last_run()
 
@@ -173,20 +181,20 @@ def start_scheduler() -> None:
 
     is_first = not os.path.exists(LAST_RUN_FILE)
     if is_first:
-        logger.info("First run detected, will scrape last 3 days")
+        logger.info("First run detected, will scrape last 1 day")
         scheduler.add_job(run_scrape, args=[True], id="first_run", max_instances=1)
 
     scheduler.add_job(
         run_scrape,
         args=[False],
-        trigger=CronTrigger(day_of_week="mon-fri", hour="10,15", minute=0, timezone="Asia/Shanghai"),
+        trigger=CronTrigger(day_of_week="mon-fri", hour="10,18", minute=0, timezone="Asia/Shanghai"),
         id="scheduled_scrape",
         max_instances=1,
         misfire_grace_time=300,
     )
 
     scheduler.start()
-    logger.info("Scheduler started (Beijing time Mon-Fri 10:00 and 15:00)")
+    logger.info("Scheduler started (Beijing time Mon-Fri 10:00 and 18:00)")
 
     try:
         asyncio.get_event_loop().run_forever()

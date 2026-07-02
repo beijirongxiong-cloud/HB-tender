@@ -7,8 +7,8 @@ import re
 
 from src.scraper.scrapling_base import ScraplingScraper, TenderItem
 
-VALID_PUB_ONE_TYPES = {"PROCUREMENT", "CANDIDATE_PUBLICITY", "ONE_SOURCE_PROCUREMENT", "PURCHASE_OPINION"}
-SEARCH_PUB_TYPES = ["PROCUREMENT", "PURCHASE_SERVICE"]
+VALID_PUB_ONE_TYPES = {"PROCUREMENT", "CANDIDATE_PUBLICITY", "ONE_SOURCE_PROCUREMENT", "PURCHASE_OPINION", "INTERNAL_PUBLICITY"}
+SEARCH_PUB_TYPES = ["PROCUREMENT", "PURCHASE_SERVICE", "CANDIDATE_PUBLICITY"]
 
 
 class MobileScraper(ScraplingScraper):
@@ -67,7 +67,7 @@ class MobileScraper(ScraplingScraper):
 
                 for pub_type in SEARCH_PUB_TYPES:
                     page = 1
-                    max_pages = 5
+                    max_pages = 10
 
                     while page <= max_pages:
                         body = {

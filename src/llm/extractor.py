@@ -11,8 +11,9 @@ logger = setup_logger("llm.extractor")
 SYSTEM_PROMPT = """你是招标公告信息提取助手。从招标公告正文中提取以下字段，返回JSON。
 字段说明：
 - is_bid_announcement: 该项目是否为"招标公告"（仅保留正在招标的项目）
-  - true: 招标公告、采购公告、采购项目公告、竞争性磋商公告、竞争性谈判公告、询价公告、询比公告、比选公告、征集公告、征集意见公告、资格预审公告等（项目尚未开标，尚可投标或提出意见）
+  - true: 招标公告、采购公告、采购项目公告、竞争性磋商公告、竞争性谈判公告、询价公告、询比公告、比选公告、征集公告、征集意见公告、寻源公告、资格预审公告、入围公告、框架采购公告等（项目尚未开标，尚可投标或提出意见）
   - false: 中标公告、成交公告、中标候选人公示、评标结果公示、招标失败公告、废标公告、流标公告、终止公告、更正公告、合同公告、合同公示、履约验收等
+  - false: 采购预告、事前公示、意向公示、需求公示、前期公示、计划公示、采购意向等仅为预告性质的公告（不是正式招标，无法投标）
 - bidder: 招标单位/招标人/采购人/发布单位（机构全称）
 - budget: 项目预算，统一换算为"万元"单位的纯数字（如"50万"→50，"100万元"→100，"500000元"→50）
 - deadline: 报名截止时间（格式 YYYY-MM-DD HH:MM，无则空）
@@ -24,7 +25,9 @@ SYSTEM_PROMPT = """你是招标公告信息提取助手。从招标公告正文�
 - 只提取正文中明确出现的信息，找不到的字段填空字符串
 - 不要编造或推测
 - budget 必须是纯数字（万元），无预算信息填空
-- is_bid_announcement 必须严格判断：只有项目尚在招标阶段（可投标）才为true，其余一律false"""
+- is_bid_announcement 必须严格判断：只有项目尚在招标阶段（可投标）才为true，其余一律false
+- 采购预告/事前公示/意向公示/需求公示/计划公示等预告性质的公告，is_bid_announcement应为false
+- 注意：标题含"改造""建设"但内容为企业文化/培训/咨询的，is_bid_announcement应为true"""
 
 
 class LLMExtractor:
@@ -41,7 +44,7 @@ class LLMExtractor:
             return item
 
         truncated = page_text[: self.MAX_TEXT_LENGTH]
-        model = os.getenv("VOLC_EXTRACT_MODEL", "deepseek-v4-flash")
+        model = os.getenv("GPT_EXTRACT_MODEL", "gpt-4o") if os.getenv("GPT_API_KEY") else os.getenv("VOLC_EXTRACT_MODEL", "deepseek-v4-flash")
         try:
             data = await self.llm.chat_json(
                 [
